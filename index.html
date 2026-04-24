@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marianki 2026</title>
+<meta name="description" content="Marianki to niezwykłe spotkanie młodzieży z mariańskich parafii i nie tylko.">
+<link rel="icon" type="image/png" href="img/favicon.png" sizes="32x32">
+<!-- Preconnect do Google Fonts (eliminuje RTT) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Preload hero image - LCP -->
+<link rel="preload" as="image" href="img/P1032963.webp" fetchpriority="high">
+<!-- Google Fonts asynchronicznie - nie blokuje renderowania -->
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
+<style>
+  :root {
+    --green: #1a4a1a;
+    --green-mid: #2d7a2d;
+    --green-light: #4caf50;
+    --gold: #e8a020;
+    --gold-light: #f5c842;
+    --cream: #fdf6e8;
+    --dark: #0f1f0f;
+    
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--dark);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    user-select: none;   
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 0.8rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: linear-gradient(to bottom, rgba(15,31,15,0.92), transparent);
+    transition: background 0.3s;
+    will-change: background;
+  }
+  nav.scrolled { background: rgba(7,15,7,0.97); backdrop-filter: blur(8px); }
+  .nav-brand { display: flex; align-items: center; text-decoration: none; }
+  .nav-logo { height: 52px; width: auto; display: block; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(253,246,232,0.75); text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* hamburger */
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; background: none; border: none; padding: 4px; z-index: 101;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--cream); transition: transform 0.3s, opacity 0.3s;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .mobile-menu {
+    display: none; position: fixed; inset: 0;
+    background: rgba(7,15,7,0.98); z-index: 99;
+    flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-size: 1.4rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--cream); text-decoration: none; transition: color 0.2s;
+  }
+  .mobile-menu a:hover { color: var(--gold); }
+
+  @media (max-width: 680px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; position: relative;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    overflow: hidden; background: var(--dark);
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('img/P1032963.webp');
+    background-size: cover; background-position: center top;
+    opacity: 0.35; filter: saturate(0.6);
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, var(--dark) 100%),
+                linear-gradient(to right, rgba(15,31,15,0.6) 0%, transparent 60%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center; padding: 2rem;
+    animation: fadeUp 1s ease both;
+  }
+  .logo-icon { width: 100px; height: 100px; margin: 0 auto 1.5rem; display: block; }
+  .hero-eyebrow {
+    font-weight: 300; font-size: 0.8rem; letter-spacing: 0.35em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 1rem;
+    animation: fadeUp 1s 0.15s ease both;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif; font-weight: 900;
+    font-size: clamp(3.5rem, 12vw, 10rem); line-height: 0.9;
+    color: var(--cream); margin-bottom: 0.5rem;
+    animation: fadeUp 1s 0.25s ease both;
+  }
+  .hero-title span { color: var(--gold); font-style: italic; }
+  .hero-year {
+    font-family: 'Playfair Display', serif; font-weight: 700;
+    font-size: clamp(1.5rem, 5vw, 3.5rem); color: var(--gold);
+    letter-spacing: 0.1em; animation: fadeUp 1s 0.35s ease both;
+  }
+  .hero-meta {
+    margin-top: 2rem; font-size: 0.85rem; font-weight: 300;
+    letter-spacing: 0.15em; color: rgba(253,246,232,0.7); text-transform: uppercase;
+    animation: fadeUp 1s 0.45s ease both;
+  }
+  .hero-cta {
+    margin-top: 2.5rem; display: flex; gap: 1rem;
+    justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 1s 0.55s ease both;
+  }
+
+  /* BUTTONS */
+  .btn-primary {
+    background: var(--gold); color: var(--dark);
+    font-family: 'DM Sans', sans-serif; font-weight: 500;
+    font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.9rem 2.2rem; border: none; cursor: pointer;
+    text-decoration: none; display: inline-block;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-outline {
+    border: 1.5px solid rgba(253,246,232,0.4); color: var(--cream);
+    font-family: 'DM Sans', sans-serif; font-weight: 300;
+    font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.9rem 2.2rem; background: transparent; cursor: pointer;
+    text-decoration: none; display: inline-block;
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+  /* SHARED */
+  .section { padding: 5rem 1.5rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.7rem; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.2rem;
+  }
+  .gold-line { display: block; width: 50px; height: 2px; background: var(--gold); margin: 1.5rem 0; }
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(232,160,32,0.3), transparent);
+    margin: 0 auto; max-width: 900px;
+  }
+
+  /* MASONRY */
+  .gallery-section { background: var(--dark); padding: 5rem 1.5rem; }
+  .masonry { columns: 3; column-gap: 0.6rem; max-width: 1200px; margin: 0 auto; }
+  @media (max-width: 900px) { .masonry { columns: 2; } }
+  @media (max-width: 500px) { .masonry { columns: 1; } }
+  .masonry-item {
+    break-inside: avoid; margin-bottom: 0.6rem;
+    overflow: hidden; cursor: pointer;
+  }
+  .masonry-item img {
+    width: 100%; display: block;
+    filter: saturate(0.75) brightness(0.9);
+    transition: filter 0.4s ease, transform 0.5s ease;
+    will-change: filter, transform;
+  }
+  /* content-visibility dla sekcji poniżej fold */
+  .about, .join, .program, footer {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
+  }
+  .masonry-item:hover img { filter: saturate(1.1) brightness(1.05); transform: scale(1.03); }
+
+  /* LIGHTBOX */
+  .lightbox {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.92); z-index: 999;
+    align-items: center; justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; box-shadow: 0 0 80px rgba(0,0,0,0.8); }
+  .lightbox-close {
+    position: absolute; top: 1.5rem; right: 2rem;
+    font-size: 2rem; color: var(--cream); cursor: pointer;
+    opacity: 0.7; background: none; border: none; transition: opacity 0.2s;
+  }
+  .lightbox-close:hover { opacity: 1; }
+
+  /* ABOUT */
+  .about { background: var(--dark); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
+  .about-heading {
+    font-family: 'Playfair Display', serif; font-weight: 900;
+    font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 1.5rem;
+  }
+  .about-heading em { font-style: italic; color: var(--gold); }
+  .about-text { font-weight: 300; line-height: 1.85; color: rgba(253,246,232,0.75); font-size: 1.05rem; }
+  .about-single-img { width: 100%; height: 460px; object-fit: cover; filter: saturate(0.85); display: block; }
+  @media (max-width: 768px) { .about-single-img { height: 260px; } }
+
+  /* JOIN */
+  .join { background: linear-gradient(135deg, #0f1f0f 0%, #1a3a1a 50%, #0f1f0f 100%); }
+  .join-heading {
+    font-family: 'Playfair Display', serif; font-weight: 900;
+    font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1.15; margin-bottom: 3rem; max-width: 600px;
+  }
+  .join-heading em { color: var(--gold); font-style: italic; }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2.5rem; }
+  .step {
+    border-left: 2px solid var(--gold); padding-left: 1.5rem;
+    opacity: 0; transform: translateY(20px); transition: opacity 0.6s, transform 0.6s;
+  }
+  .step.visible { opacity: 1; transform: translateY(0); }
+  .step-num {
+    font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900;
+    color: var(--gold); line-height: 1; margin-bottom: 0.5rem;
+  }
+  .step-title { font-weight: 500; font-size: 1.05rem; margin-bottom: 0.6rem; color: var(--cream); }
+  .step-text { font-weight: 300; font-size: 0.92rem; color: rgba(253,246,232,0.65); line-height: 1.7; }
+  .step-text a { color: var(--gold); text-underline-offset: 3px; }
+  .step-text a:hover { color: var(--gold-light); }
+
+  /* PROGRAM */
+  .program { background: var(--dark); border-top: 1px solid rgba(232,160,32,0.15); }
+  .program-intro {
+    font-size: 0.82rem; color: rgba(253,246,232,0.45);
+    font-style: italic; margin-bottom: 2.5rem; line-height: 1.7;
+  }
+  .program-tabs {
+    display: flex; border-bottom: 1px solid rgba(232,160,32,0.2);
+    margin-bottom: 2.5rem; overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+  }
+  .program-tabs::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+  .tab-btn {
+    background: none; border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(253,246,232,0.4); padding: 0.8rem 1.8rem;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+    transition: color 0.2s, border-color 0.2s; white-space: nowrap;
+  }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .tab-btn:hover { color: var(--cream); }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+
+  .schedule { display: flex; flex-direction: column; max-width: 800px; }
+  .schedule-item {
+    display: grid; grid-template-columns: 110px 1fr; gap: 1rem;
+    padding: 0.95rem 0; border-bottom: 1px solid rgba(253,246,232,0.07);
+    align-items: baseline; opacity: 0; transform: translateX(-10px);
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  .schedule-item.vis { opacity: 1; transform: translateX(0); }
+  .schedule-time {
+    font-family: 'Playfair Display', serif; font-size: 0.9rem;
+    color: var(--gold); font-weight: 700; letter-spacing: 0.04em;
+  }
+  .schedule-event { font-size: 0.95rem; font-weight: 300; color: rgba(253,246,232,0.85); line-height: 1.5; }
+  .schedule-event strong { font-weight: 500; color: var(--cream); }
+  .schedule-note { font-size: 0.76rem; color: rgba(253,246,232,0.38); font-style: italic; margin-top: 0.15rem; }
+
+  .program-location {
+    margin-top: 2.5rem; padding: 1.2rem 1.5rem;
+    border-left: 2px solid var(--gold); background: rgba(232,160,32,0.04);
+  }
+  .program-location p { font-size: 0.88rem; color: rgba(253,246,232,0.6); line-height: 1.8; }
+  .program-location strong { color: var(--cream); font-weight: 500; }
+
+  @media (max-width: 480px) {
+    .schedule-item { grid-template-columns: 80px 1fr; gap: 0.6rem; }
+    .schedule-time { font-size: 0.78rem; }
+    .schedule-event { font-size: 0.88rem; }
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070f07; padding: 2.5rem 1.5rem;
+    text-align: center; border-top: 1px solid rgba(232,160,32,0.1);
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif; font-size: 1.4rem;
+    font-weight: 900; color: var(--gold); margin-bottom: 0.6rem;
+  }
+  .footer-sub {
+    font-size: 0.75rem; color: rgba(253,246,232,0.3);
+    letter-spacing: 0.1em; text-transform: uppercase; line-height: 2;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* MOBILE */
+  @media (max-width: 480px) {
+    .section { padding: 3.5rem 1.2rem; }
+    .hero-cta { flex-direction: column; align-items: center; }
+    .btn-primary, .btn-outline { width: 100%; max-width: 280px; text-align: center; }
+    nav { padding: 0.7rem 1.2rem; }
+    .nav-logo { height: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="#" class="nav-brand">
+    <img src="img/navimg.webp" alt="Marianki" class="nav-logo" width="52" height="52" loading="eager" decoding="async">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#o-marianki">O Mariankach</a></li>
+    <li><a href="#jak-przyjechac">Jak przyjechać</a></li>
+    <li><a href="#program">Program</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#o-marianki" onclick="closeMenu()">O Mariankach</a>
+  <a href="#jak-przyjechac" onclick="closeMenu()">Jak przyjechać</a>
+  <a href="#program" onclick="closeMenu()">Program</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <img src="img/logozlote.webp" class="logo-icon" alt="Marianki logo" width="100" height="100" fetchpriority="high">
+    <p class="hero-eyebrow">XXIV Spotkanie Młodzieży · Góra Kalwaria</p>
+    <h1 class="hero-title">Mari<span>anki</span></h1>
+    <div class="hero-year">2026</div>
+    <p class="hero-meta">Integracja · Adoracja · Ewangelizacja</p>
+    <div class="hero-cta">
+      <a href="mailto:duszpasterz@marianie.pl" class="btn-primary">Zapisz grupę</a>
+      <a href="#o-marianki" class="btn-outline">Dowiedz się więcej</a>
+    </div>
+  </div>
+</section>
+
+<section class="section about" id="o-marianki">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <p class="section-label">Co to jest?</p>
+        <h2 class="about-heading">Trzy dni, które <em>zmieniają</em> wszystko</h2>
+        <span class="gold-line"></span>
+        <p class="about-text">
+          Marianki to niezwykłe spotkanie młodzieży z mariańskich parafii i nie tylko. To trzy dni, na które wiele osób czeka przez cały rok — święto młodych, na którym spotyka się przyjaciół, poznaje nowych ludzi oraz doświadcza tego, czym jest żywy Kościół.
+        </p>
+        <br>
+        <p class="about-text">
+          Marianki to spotkanie mające kilkudziesięcioletnią tradycję. Odbywa się w <strong>Górze Kalwarii</strong> pod Warszawą, gdzie znajduje się grób świętego Ojca Stanisława Papczyńskiego, Założyciela Zgromadzenia Księży Marianów.
+        </p>
+      </div>
+      <div>
+        <img src="img/M04A2342.webp" alt="Marianki - koncert" class="about-single-img" loading="lazy" decoding="async">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MASONRY GALLERY -->
+<section class="gallery-section">
+  <div class="container">
+    <p class="section-label" style="text-align:center;margin-bottom:2rem;">Galeria</p>
+    <div class="masonry">
+      <div class="masonry-item" onclick="openLightbox(this)"><img src="img/M04A2346.webp" alt="Marianki" loading="eager" decoding="async"></div>
+      <div class="masonry-item" onclick="openLightbox(this)"><img src="img/M04A2363.webp" alt="Marianki" loading="lazy" decoding="async"></div>
+      <div class="masonry-item" onclick="openLightbox(this)"><img src="img/M04A2431.webp" alt="Marianki" loading="lazy" decoding="async"></div>
+      <div class="masonry-item" onclick="openLightbox(this)"><img src="img/M04A2307.webp" alt="Marianki" loading="lazy" decoding="async"></div>
+      <div class="masonry-item" onclick="openLightbox(this)"><img src="img/M04A2310.webp" alt="Marianki" loading="lazy" decoding="async"></div>
+      <div class="masonry-item" onclick="openLightbox(this)"><img src="img/M04A2323.webp" alt="Marianki" loading="lazy" decoding="async"></div>
+      <div class="masonry-item" onclick="openLightbox(this)"><img src="img/M04A2336.webp" alt="Marianki" loading="lazy" decoding="async"></div>
+      <div class="masonry-item" onclick="openLightbox(this)"><img src="img/M04A2342.webp" alt="Marianki" loading="lazy" decoding="async"></div>
+      <div class="masonry-item" onclick="openLightbox(this)"><img src="img/M04A2334.webp" alt="Marianki" loading="lazy" decoding="async"></div>
+    </div>
+  </div>
+</section>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<!-- ABOUT -->
+
+
+<div class="divider"></div>
+
+<!-- HOW TO JOIN -->
+<section class="section join" id="jak-przyjechac">
+  <div class="container">
+    <p class="section-label">Jak dołączyć?</p>
+    <h2 class="join-heading">Zapraszamy na <em>XXIV edycję</em> Marianek</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Namów duszpasterza</div>
+        <p class="step-text">
+          Porozmawiaj ze swoim duszpasterzem o przyjeździe. Stwórzcie razem grupę z waszej parafii.
+          Kontakt: <a href="mailto:duszpasterz@marianie.pl">duszpasterz@marianie.pl</a>
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Dołącz do grupy</div>
+        <p class="step-text">
+          Znajdź grupę, która jedzie na Marianki — na pewno jest taka w każdej parafii Księży Marianów.
+          Listę parafii znajdziesz na <a href="https://marianie.pl" target="_blank">marianie.pl</a>
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Przyjedź!</div>
+        <p class="step-text">
+          Reszta dzieje się sama. Przyjedź otwarty na nowych ludzi, muzykę, modlitwę i przygodę.
+        </p>
+      </div>
+    </div>
+    <br><br>
+    <a href="mailto:duszpasterz@marianie.pl" class="btn-primary">Napisz do nas</a>
+  </div>
+</section>
+
+<!-- PROGRAM -->
+<section class="section program" id="program">
+  <div class="container">
+    <p class="section-label">Harmonogram</p>
+    <h2 class="about-heading">Program <em>2026</em></h2>
+    <span class="gold-line"></span>
+    <p class="program-intro">
+      Wszystkie punkty programu mają miejsce w namiocie spotkania, chyba że zaznaczono inaczej.<br>
+      Organizator zastrzega sobie prawo do zmian w programie.
+    </p>
+
+    <div class="program-tabs">
+      <button class="tab-btn active" onclick="switchTab('pt')">Piątek</button>
+      <button class="tab-btn" onclick="switchTab('sb')">Sobota</button>
+      <button class="tab-btn" onclick="switchTab('nd')">Niedziela</button>
+    </div>
+
+    <div class="tab-pane active" id="tab-pt">
+      <div class="schedule">
+        <div class="schedule-item">
+          <div class="schedule-time">17:30–20:00</div>
+          <div class="schedule-event"><strong>Rejestracja</strong></div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">19:30</div>
+          <div class="schedule-event"><strong>Rozpoczęcie spotkania</strong></div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">20:30</div>
+          <div class="schedule-event"><strong>Koncert</strong></div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">ok. 22:15</div>
+          <div class="schedule-event">Przejście na noclegi</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="tab-sb">
+      <div class="schedule">
+        <div class="schedule-item">
+          <div class="schedule-time">od 7:00</div>
+          <div class="schedule-event">
+            <strong>Śniadanie</strong>
+            <div class="schedule-note">wg podanego w piątek wieczór grafiku (szkoła)</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">9:00</div>
+          <div class="schedule-event"><strong>Jutrznia</strong></div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">9:30</div>
+          <div class="schedule-event"><strong>Blok katechetyczny</strong></div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">12:00</div>
+          <div class="schedule-event"><strong>Quiz i bieg mariankowy</strong></div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">13:00</div>
+          <div class="schedule-event"><strong>Obiad</strong></div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">14:15</div>
+          <div class="schedule-event"><strong>Warsztaty</strong></div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">16:15</div>
+          <div class="schedule-event"><strong>Spowiedź oraz Msza Święta</strong></div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">19:00</div>
+          <div class="schedule-event"><strong>Kolacja</strong></div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">20:30</div>
+          <div class="schedule-event"><strong>Nieszpory</strong></div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">21:00</div>
+          <div class="schedule-event"><strong>Koncert uwielbienia</strong></div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">ok. 23:00</div>
+          <div class="schedule-event">Przejście na nocleg</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="tab-nd">
+      <div class="schedule">
+        <div class="schedule-item">
+          <div class="schedule-time">6:15–8:00</div>
+          <div class="schedule-event">
+            <strong>Śniadanie</strong>
+            <div class="schedule-note">w miejscu noclegu wg podanego w piątek wieczór grafiku</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">8:30</div>
+          <div class="schedule-event">
+            <strong>Jutrznia</strong>
+            <div class="schedule-note">namiot</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">9:00</div>
+          <div class="schedule-event"><strong>Panel z zaproszonymi gośćmi</strong></div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">10:30</div>
+          <div class="schedule-event">
+            <strong>Marsz młodych</strong>
+            <div class="schedule-note">do sanktuarium św. O. St. Papczyńskiego na Marianki</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">11:00</div>
+          <div class="schedule-event">
+            <strong>Nabożeństwo jubileuszowe</strong>
+            <div class="schedule-note">sanktuarium Marianki</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">12:00</div>
+          <div class="schedule-event">
+            <strong>Msza Święta</strong>
+            <div class="schedule-note">sanktuarium Marianki</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">13:00</div>
+          <div class="schedule-event">
+            <strong>Obiad</strong>
+            <div class="schedule-note">sanktuarium Marianki</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">ok. 13:30</div>
+          <div class="schedule-event">Zakończenie spotkania</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="program-location">
+      <p>
+        <strong>22–24 maja 2026</strong><br>
+        Namiot spotkania, ogrody parafialne<br>
+        ul. ks. Sajny 2, Góra Kalwaria
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Marianki 2026</div>
+  <p class="footer-sub">
+    Organizator: Duszpasterstwo Młodzieży i Powołań Księży Marianów<br>
+    Góra Kalwaria &nbsp;·&nbsp; <a href="mailto:duszpasterz@marianie.pl" style="color:var(--gold);text-decoration:none;">duszpasterz@marianie.pl</a>
+  </p>
+</footer>
+
+<script>
+  // Nav scroll - passive listener dla lepszej wydajności przewijania
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60), { passive: true });
+
+  // Hamburger
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+  function closeMenu() {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Lightbox
+  function openLightbox(el) {
+    document.getElementById('lightbox-img').src = el.querySelector('img').src;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+  // Program tabs
+  function switchTab(day) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    document.querySelector(`[onclick="switchTab('${day}')"]`).classList.add('active');
+    const pane = document.getElementById('tab-' + day);
+    pane.classList.add('active');
+    pane.querySelectorAll('.schedule-item').forEach((el, i) => {
+      el.classList.remove('vis');
+      setTimeout(() => el.classList.add('vis'), i * 45);
+    });
+  }
+  // animate first tab on load
+  document.querySelectorAll('#tab-pt .schedule-item').forEach((el, i) => {
+    setTimeout(() => el.classList.add('vis'), i * 45 + 300);
+  });
+
+  // Steps reveal - uruchamiany w czasie bezczynności przeglądarki
+  const initIO = () => {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 150);
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.step').forEach(s => io.observe(s));
+  };
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(initIO);
+  } else {
+    setTimeout(initIO, 200);
+  }
+</script>
+</body>
+</html>
