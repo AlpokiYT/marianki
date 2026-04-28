@@ -313,6 +313,10 @@
   }
 
   /* ANIMATIONS */
+  @keyframes logo-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
@@ -355,7 +359,7 @@
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <img src="img/logozlote.webp" class="logo-icon" alt="Marianki logo" width="100" height="100" fetchpriority="high">
+    <img src="img/logozlote.webp" class="logo-icon" alt="Marianki logo" width="100" height="100" fetchpriority="high" id="easter-logo">
     <p class="hero-eyebrow">XXIV Spotkanie Młodzieży · Góra Kalwaria</p>
     <h1 class="hero-title">Mari<span>anki</span></h1>
     <div class="hero-year">2026</div>
@@ -617,7 +621,31 @@
 </footer>
 
 <script>
-  // Nav scroll - passive listener dla lepszej wydajności przewijania
+  // 🥚 Easter egg — klik w logo
+  (function() {
+    const logo = document.getElementById('easter-logo');
+    let audio = null;
+    let playing = false;
+    logo.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (!audio) {
+        audio = new Audio('powolanie.mp3');
+        audio.addEventListener('ended', () => { playing = false; logo.style.animation = ''; });
+      }
+      if (playing) {
+        audio.pause();
+        audio.currentTime = 0;
+        playing = false;
+        logo.style.animation = '';
+      } else {
+        audio.play().then(() => {
+          playing = true;
+          logo.style.cssText += '; animation: logo-spin 8s linear infinite !important;';
+        }).catch(() => {});
+      }
+    });
+  })();
+
   const nav = document.getElementById('navbar');
   window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60), { passive: true });
 
